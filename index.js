@@ -12,8 +12,9 @@ app.use(function(req,res,next){
   }
   else if(process.env.AUTHZ_KEY != authz){
     res.status(401).send({message: 'Access denied.'})
+  } else {
+    next()
   }
-  next()
 })
 
 app.use(bodyParser.json())
