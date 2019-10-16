@@ -31,7 +31,7 @@ class UserModel {
             namestring = namestring + this.title + " "
         }
         if(this.prefix != null){
-            namesstring = namestring + this.prefix + " "
+            namestring = namestring + this.prefix + " "
         }
         namestring = namestring + this.firstName + " " + this.secondName
         if(this.suffix != null){
