@@ -30,7 +30,7 @@ exports.token_enrich = async function(req, res){
             try {
             var response = await axios.get("https://"+userDomain+'/api/v1/users/'+uuid,{
                 headers:{
-                    Authorization: 'Bearer '+ apikey
+                    Authorization: 'SSW '+ apikey
                 }
             })
             var user = new UserModel(response.data)
