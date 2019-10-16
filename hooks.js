@@ -1,8 +1,8 @@
 'use strict';
 
-const UserModel = require ('usermodel.js')
+const UserModel = require ('./usermodel')
 
-exports.token_enrich = function(req, res){
+exports.token_enrich = async function(req, res){
     console.log(req.body.data)
 
     var login = req.body.data.context.session.login.split("@");
