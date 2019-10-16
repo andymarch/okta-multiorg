@@ -21,112 +21,113 @@ exports.token_enrich = async function(req, res){
 
         console.log("Need to lookup user " + uuid + " of tenant " + userDomain)
         var keyset = process.env.KEYSET
-        var apikey = keyset.userDomain
+        var apikey = JSON.parse(keyset)[userDomain]
 
         if(apikey == null || apikey == ""){
             console.error("No API key configured for federated partner "+userDomain)
         }
-
-        try {
-        var response = await axios.get("https://"+userDomain+'/api/v1/users/'+uuid,{
-            headers:{
-                Authorization: 'Bearer '+ apikey
-            }
-        })
-        var user = new UserModel(response.data)
-        
-
-        var scps = req.body.data.access.scopes;
-        if(scps.hasOwnProperty('profile')){
-            structure[commands].push({
-                'type': 'com.okta.identity.patch',
-                'value': [
-                    {
-                        'op': 'replace',
-                        'path': '/claims/name',
-                        'value': user.getName()
-                    }
-                ]
+        else {
+            try {
+            var response = await axios.get("https://"+userDomain+'/api/v1/users/'+uuid,{
+                headers:{
+                    Authorization: 'Bearer '+ apikey
+                }
             })
+            var user = new UserModel(response.data)
+            
 
-            structure[commands].push({
-                'type': 'com.okta.identity.patch',
-                'value': [
-                    {
-                        'op': 'add',
-                        'path': '/claims/given_name',
-                        'value': user.firstName
-                    }
-                ]
-            })
+            var scps = req.body.data.access.scopes;
+            if(scps.hasOwnProperty('profile')){
+                structure[commands].push({
+                    'type': 'com.okta.identity.patch',
+                    'value': [
+                        {
+                            'op': 'replace',
+                            'path': '/claims/name',
+                            'value': user.getName()
+                        }
+                    ]
+                })
 
-            structure[commands].push({
-                'type': 'com.okta.identity.patch',
-                'value': [
-                    {
-                        'op': 'add',
-                        'path': '/claims/family_name',
-                        'value': user.secondName
-                    }
-                ]
-            })
-
-            if(user.email != null && user.email != ""){
                 structure[commands].push({
                     'type': 'com.okta.identity.patch',
                     'value': [
                         {
                             'op': 'add',
-                            'path': '/claims/email',
-                            'value': user.email
+                            'path': '/claims/given_name',
+                            'value': user.firstName
                         }
                     ]
                 })
-            }
 
-            if(user.nickName != null && user.nickName != ""){
                 structure[commands].push({
                     'type': 'com.okta.identity.patch',
                     'value': [
                         {
                             'op': 'add',
-                            'path': '/claims/nickName',
-                            'value': user.nickName
+                            'path': '/claims/family_name',
+                            'value': user.secondName
                         }
                     ]
                 })
-            }
 
-            if(user.profileUrl != null && user.profileUrl != ""){
-                structure[commands].push({
-                    'type': 'com.okta.identity.patch',
-                    'value': [
-                        {
-                            'op': 'add',
-                            'path': '/claims/profileUrl',
-                            'value': user.profileUrl
-                        }
-                    ]
-                })
-            }
+                if(user.email != null && user.email != ""){
+                    structure[commands].push({
+                        'type': 'com.okta.identity.patch',
+                        'value': [
+                            {
+                                'op': 'add',
+                                'path': '/claims/email',
+                                'value': user.email
+                            }
+                        ]
+                    })
+                }
 
-            if(user.locale != null && user.locale != ""){
-                structure[commands].push({
-                    'type': 'com.okta.identity.patch',
-                    'value': [
-                        {
-                            'op': 'add',
-                            'path': '/claims/locale',
-                            'value': user.locale
-                        }
-                    ]
-                })
+                if(user.nickName != null && user.nickName != ""){
+                    structure[commands].push({
+                        'type': 'com.okta.identity.patch',
+                        'value': [
+                            {
+                                'op': 'add',
+                                'path': '/claims/nickName',
+                                'value': user.nickName
+                            }
+                        ]
+                    })
+                }
+
+                if(user.profileUrl != null && user.profileUrl != ""){
+                    structure[commands].push({
+                        'type': 'com.okta.identity.patch',
+                        'value': [
+                            {
+                                'op': 'add',
+                                'path': '/claims/profileUrl',
+                                'value': user.profileUrl
+                            }
+                        ]
+                    })
+                }
+
+                if(user.locale != null && user.locale != ""){
+                    structure[commands].push({
+                        'type': 'com.okta.identity.patch',
+                        'value': [
+                            {
+                                'op': 'add',
+                                'path': '/claims/locale',
+                                'value': user.locale
+                            }
+                        ]
+                    })
+                }
             }
         }
-    }
-    catch(error){
-        logger.error("Unable to retrieve user info from federated partner")
-        logger.error(error)
+        catch(error){
+            console.error("Unable to retrieve user info from federated partner")
+            logconsole.error(error)
+        }
     }
     }
     res.json(structure);
