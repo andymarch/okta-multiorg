@@ -126,7 +126,7 @@ exports.token_enrich = async function(req, res){
         }
         catch(error){
             console.error("Unable to retrieve user info from federated partner")
-            logconsole.error(error)
+            console.error(error)
         }
     }
     }
