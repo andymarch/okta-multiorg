@@ -13,7 +13,7 @@ class UserModel {
                 this.nickName = profileJson.profile.nickName
                 this.organization = profileJson.profile.organization
                 this.profileUrl = profileJson.profile.profileUrl
-                this.local = profileJson.profile.locale
+                this.locale = profileJson.profile.locale
 
                 this.status = profileJson.status
                 this.lastLogin = profileJson.lastLogin
