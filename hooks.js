@@ -20,7 +20,7 @@ exports.token_enrich = async function(req, res){
         //decompose subject and call the appropriate spoke for user data
 
         console.log("Need to lookup user " + uuid + " of tenant " + userDomain)
-        var apikey = process.env.userDomain
+        var apikey = process.env[userDomain]
         console.log(apikey)
 
         var response = await axios.get("https://"+userDomain+'/api/v1/users/'+uuid,{
