@@ -20,9 +20,14 @@ exports.token_enrich = async function(req, res){
         //decompose subject and call the appropriate spoke for user data
 
         console.log("Need to lookup user " + uuid + " of tenant " + userDomain)
-        var apikey = process.env[userDomain]
-        console.log(apikey)
+        var keyset = process.env.KEYSET
+        var apikey = JSON.parse(keyset).userDomain
 
+        if(apikey == null || apikey == ""){
+            console.error("No API key configured for federated partner "+userDomain)
+        }
+
+        try {
         var response = await axios.get("https://"+userDomain+'/api/v1/users/'+uuid,{
             headers:{
                 Authorization: 'Bearer '+ apikey
@@ -118,6 +123,11 @@ exports.token_enrich = async function(req, res){
                 })
             }
         }
+    }
+    catch(error){
+        logger.error("Unable to retrieve user info from federated partner")
+        logger.error(error)
+    }
     }
     res.json(structure);
 };
