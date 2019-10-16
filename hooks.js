@@ -19,7 +19,7 @@ exports.token_enrich = function(req, res){
         console.log("Need to lookup user " + uuid + " of tenant " + userDomain)
 
         var scps = req.body.data.access.scopes;
-        if(scps.includes("profile")){
+        if(scps.hasOwnProperty('profile')){
             var idCommand = {
                 'type': 'com.okta.identity.patch',
                 'value': [
