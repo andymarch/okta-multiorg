@@ -22,7 +22,7 @@ exports.token_enrich = async function(req, res){
         console.log("Need to lookup user " + uuid + " of tenant " + userDomain)
         var apikey = process.env.userDomain
 
-        var response = await axios.get(userDomain+'/api/v1/users/'+uuid,{
+        var response = await axios.get("https://"+userDomain+'/api/v1/users/'+uuid,{
             headers:{
                 Authorization: 'Bearer '+ apikey
             }
