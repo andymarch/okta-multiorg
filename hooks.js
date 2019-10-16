@@ -21,7 +21,7 @@ exports.token_enrich = async function(req, res){
 
         console.log("Need to lookup user " + uuid + " of tenant " + userDomain)
         var keyset = process.env.KEYSET
-        var apikey = JSON.parse(keyset).userDomain
+        var apikey = keyset.userDomain
 
         if(apikey == null || apikey == ""){
             console.error("No API key configured for federated partner "+userDomain)
