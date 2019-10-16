@@ -3,7 +3,7 @@
 exports.token_enrich = function(req, res){
     console.log(req.body.data)
 
-    var login = JSON.parse(req.body.data).context.session.login.split("@");
+    var login = req.body.data.context.session.login.split("@");
     //00unvpfiu10vrolDp0h7@multiorg-gs.oktapreview.com#
 
     var uuid = login[0]
