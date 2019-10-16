@@ -35,7 +35,7 @@ class UserModel {
         }
         namestring = namestring + this.firstName + " " + this.secondName
         if(this.suffix != null){
-            namesstring = namestring + " " + this.suffix
+            namestring = namestring + " " + this.suffix
         }
         return namestring
     }
