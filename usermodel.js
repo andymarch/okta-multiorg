@@ -26,7 +26,18 @@ class UserModel {
     }
 
     getName(){
-        return this.title + " " + this.prefix + " " + this.firstName + " " + this.lastName+ " " + this.suffix
+        var namestring = ""
+        if(this.title != null){
+            namestring = namestring + this.title + " "
+        }
+        if(this.prefix != null){
+            namesstring = namestring + this.prefix + " "
+        }
+        namestring = namestring + this.firstName + " " + this.lastName
+        if(this.suffix != null){
+            namesstring = namestring + " " + this.suffix
+        }
+        return namestring
     }
 }
 
